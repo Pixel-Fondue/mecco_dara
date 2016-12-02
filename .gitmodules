@@ -7,3 +7,27 @@
 [submodule "Kits/mecco_Kelvin"]
 	path = Kits/mecco_Kelvin
 	url = https://adamohern@github.com/adamohern/mecco_kelvin
+[submodule "Kits/mecco_Bling"]
+	path = Kits/mecco_Bling
+	url = https://adamohern@github.com/adamohern/mecco_bling
+[submodule "Kits/mecco_RenderMonkey"]
+	path = Kits/mecco_RenderMonkey
+	url = https://adamohern@github.com/adamohern/mecco_renderMonkey
+[submodule "Kits/mecco_Wheely"]
+	path = Kits/mecco_Wheely
+	url = https://adamohern@github.com/adamohern/mecco_wheely
+[submodule "Kits/mecco_Flipper"]
+	path = Kits/mecco_Flipper
+	url = https://adamohern@github.com/adamohern/mecco_flipper
+[submodule "Kits/mecco_Cropper"]
+	path = Kits/mecco_Cropper
+	url = https://adamohern@github.com/adamohern/mecco_cropper
+[submodule "Kits/mecco_Metermade"]
+	path = Kits/mecco_Metermade
+	url = https://adamohern@github.com/adamohern/mecco_metermade
+[submodule "Kits/mecco_NeatFreak"]
+	path = Kits/mecco_NeatFreak
+	url = https://adamohern@github.com/adamohern/mecco_neatFreak
+[submodule "Kits/mecco_Snap"]
+	path = Kits/mecco_Snap
+	url = https://adamohern@github.com/adamohern/mecco_snap
