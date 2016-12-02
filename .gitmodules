@@ -1,0 +1,9 @@
+[submodule "Kits/mecco_Zen"]
+	path = Kits/mecco_Zen
+	url = https://adamohern@github.com/adamohern/mecco_Zen
+[submodule "Kits/mecco_Passify"]
+	path = Kits/mecco_Passify
+	url = https://adamohern@github.com/adamohern/mecco_passify
+[submodule "Kits/mecco_Kelvin"]
+	path = Kits/mecco_Kelvin
+	url = https://adamohern@github.com/adamohern/mecco_kelvin
