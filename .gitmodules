@@ -31,3 +31,6 @@
 [submodule "Kits/mecco_Snap"]
 	path = Kits/mecco_Snap
 	url = https://adamohern@github.com/adamohern/mecco_snap
+[submodule "Kits/mecco_Tagger"]
+	path = Kits/mecco_Tagger
+	url = https://adamohern@github.com/adamohern/mecco_tagger
