@@ -1,0 +1,5 @@
+*.pyc
+tmp/
+.idea/
+test/frames/
+.DS_Store

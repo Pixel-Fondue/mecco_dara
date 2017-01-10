@@ -1,0 +1,23 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Zen Hotkeys Documentation</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/boilerplate.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <h1>Zen Double-Click</h1>
+
+        <p>An early experimental feature of Zen made it possible to <span class="keystroke">double-click</span> a mesh item to enter polygon selection mode, and then double-click off in space to return to item selection mode.</p>
+        <p>From an interaction standpoint, it's perfect. I love working this way, and it's really addictive. Once you start, it's very hard to go back to using the number keys to switch selection modes!</p>
+        <p>Unfortunately there's one big problem: MODO has a "feature" whereby click behaviors (like double-click) operate on whatever geometry is <em>currently under the mouse</em>, regardless of selection mode. This is a big probleem.</p>
+        <p>It means that when Zen Double-Click is enabled, double-click to select connected polys or edge loops can be unreliable, since it will always choose whichever element is currently under the mouse, rather than honoring the current selection mode. :(</p>
+        <p>There is a workaround: disable <code>Preferences > OpenGL > Selection > Mouse Regions Trigger Selection</code>. This works (hooray!), but has some undesirable consequences. With this option disabled, for example, middle-click for properties only operates on items that were already selected before the middle-click event. In other words, middle-clicking on an unselected item will not give you its properties, but rather the properties of whatever item(s) were previously selected. There are other, less-obvious quirks.</p>
+        <p>Because of these drawbacks, I don't currently recommend using Zen Double-Click. I hope that in the future we can find a workaround. In the meantime, some users still really like Zen Double-Click despite its problems. For those users, it's still available.</p>
+        <p>Cheers,<br />Adam</p>
+    </body>
+</html>
