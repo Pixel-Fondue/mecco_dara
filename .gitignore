@@ -1,4 +1,5 @@
 .DS_Store
 *.pyc
-Kits/*
-!Kits/prefs.cfg
+mecco_dara/Kits/*
+!mecco_dara/Kits/prefs.cfg
+releases/*
