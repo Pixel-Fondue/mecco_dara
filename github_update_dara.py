@@ -5,11 +5,20 @@ import requests, pprint, os, zipfile, shutil, glob, xml.etree.ElementTree
 USERNAME = "adam@evd1.tv"
 PASSWORD = "J7EksJLsb;tYGVk"
 BASE_URL = "https://api.github.com/repos/adamohern/%s/releases/latest"
+
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
+print BASE_PATH
+
 KIT_NAME = "mecco_dara"
 DARA_PATH = os.path.join(BASE_PATH, KIT_NAME)
+print DARA_PATH
+
 DARA_KITS_PATH = os.path.join(DARA_PATH, "Kits")
+print DARA_KITS_PATH
+
 DARA_RELEASES_PATH = os.path.join(BASE_PATH, "releases")
+print DARA_RELEASES_PATH
+
 
 KITS = [
     'mecco_neatFreak',
@@ -74,7 +83,7 @@ for kit in KITS:
     print "downloading %s..." % data['zipball_url']
 
     zip_file_path = download_file(kit, data['zipball_url'])
-    extracted_folder_name = extract_zip_file(zip_file_path)
+    extracted_folder_name = extract_zip_file(zip_file_path, DARA_KITS_PATH)
 
     os.rename(os.path.join(DARA_KITS_PATH, extracted_folder_name), os.path.splitext(zip_file_path)[0])
     os.remove(zip_file_path)
