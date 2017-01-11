@@ -60,6 +60,10 @@ def extract_zip_file(src, dest):
 if not os.path.exists(DARA_KITS_PATH):
     os.makedirs(DARA_KITS_PATH)
 
+# create releases foler if it doesn't exist:
+if not os.path.exists(DARA_RELEASES_PATH):
+    os.makedirs(DARA_RELEASES_PATH)
+
 # delete existing kits
 delete_dir_contents(DARA_KITS_PATH)
 
