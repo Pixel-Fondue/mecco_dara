@@ -2,14 +2,16 @@
 
 import requests, pprint, os, zipfile, shutil, glob, xml.etree.ElementTree
 
-username = "adam@evd1.tv"
-password = "J7EksJLsb;tYGVk"
-base_url = "https://api.github.com/repos/adamohern/%s/releases/latest"
-dara_path = "/Users/adam/Desktop/dara/mecco_dara"
-dara_kits_path = dara_path + "/Kits"
-dara_releases_path = "/Users/adam/Desktop/dara"
+USERNAME = "adam@evd1.tv"
+PASSWORD = "J7EksJLsb;tYGVk"
+BASE_URL = "https://api.github.com/repos/adamohern/%s/releases/latest"
+BASE_PATH = os.path.dirname(os.path.realpath(__file__))
+KIT_NAME = "mecco_dara"
+DARA_PATH = os.path.join(BASE_PATH, KIT_NAME)
+DARA_KITS_PATH = os.path.join(DARA_PATH, "Kits")
+DARA_RELEASES_PATH = os.path.join(BASE_PATH, "releases")
 
-kits = [
+KITS = [
     'mecco_neatFreak',
     'mecco_bling',
     'mecco_cropper',
@@ -26,8 +28,8 @@ kits = [
 ]
 
 def download_file(kit, url):
-    tmp_filename = os.path.join(dara_kits_path, kit + "_" + os.path.basename(url) + "_partial")
-    r = requests.get(url, stream=True, auth=(username, password))
+    tmp_filename = os.path.join(DARA_KITS_PATH, kit + "_" + os.path.basename(url) + "_partial")
+    r = requests.get(url, stream=True, auth=(USERNAME, PASSWORD))
     if r.status_code == 200:
         with open(tmp_filename, 'wb') as f:
             for chunk in r:
@@ -37,34 +39,45 @@ def download_file(kit, url):
     os.rename(tmp_filename, complete_filename)
     return complete_filename
 
-# # delete existing kits
-for the_file in os.listdir(dara_kits_path):
-    file_path = os.path.join(dara_kits_path, the_file)
-    try:
-        if os.path.isfile(file_path):
-            os.unlink(file_path)
-        elif os.path.isdir(file_path): shutil.rmtree(file_path)
-    except Exception as e:
-        print(e)
+def delete_dir_contents(directory):
+    for the_file in os.listdir(directory):
+        file_path = os.path.join(directory, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path): shutil.rmtree(file_path)
+        except Exception as e:
+            print(e)
+
+def extract_zip_file(src, dest):
+    zip_ref = zipfile.ZipFile(src, 'r')
+    extracted_folder_name = zip_ref.namelist()[0]
+    zip_ref.extractall(dest)
+    zip_ref.close()
+    return extracted_folder_name
+
+# create Kits foler if it doesn't exist:
+if not os.path.exists(DARA_KITS_PATH):
+    os.makedirs(DARA_KITS_PATH)
+
+# delete existing kits
+delete_dir_contents(DARA_KITS_PATH)
 
 # download and extract
-for kit in kits:
-    result = requests.get(base_url % kit, auth=(username, password))
-    data = result.json()
-    print "downloading", data['zipball_url']
+for kit in KITS:
+    rest_api_response = requests.get(BASE_URL % kit, auth=(USERNAME, PASSWORD))
+    data = rest_api_response.json()
+    print "downloading %s..." % data['zipball_url']
+
     zip_file_path = download_file(kit, data['zipball_url'])
+    extracted_folder_name = extract_zip_file(zip_file_path)
 
-    zip_ref = zipfile.ZipFile(zip_file_path, 'r')
-    extracted_folder_name = zip_ref.namelist()[0]
-    zip_ref.extractall(dara_kits_path)
-    zip_ref.close()
-
-    os.rename(os.path.join(dara_kits_path, extracted_folder_name), os.path.splitext(zip_file_path)[0])
+    os.rename(os.path.join(DARA_KITS_PATH, extracted_folder_name), os.path.splitext(zip_file_path)[0])
     os.remove(zip_file_path)
 
 # duplicate dara folder
-temp_directory = dara_releases_path + "/tmp"
-shutil.copytree(dara_path, temp_directory)
+temp_directory = os.path.join(DARA_RELEASES_PATH, "tmp")
+shutil.copytree(DARA_PATH, temp_directory)
 
 # # delete cruft
 for directory,subdirs,files in os.walk(temp_directory):
@@ -78,11 +91,11 @@ for directory,subdirs,files in os.walk(temp_directory):
         os.unlink(pyc_file)
 
 # retrieve dara version
-index_file = temp_directory + "/index.cfg"
+index_file = os.path.join(temp_directory, "index.cfg")
 index_xml = xml.etree.ElementTree.parse(index_file).getroot()
 dara_version = index_xml.attrib["version"]
 
-release_dirname = os.path.join(dara_releases_path, "mecco_dara_" + str(dara_version))
+release_dirname = os.path.join(DARA_RELEASES_PATH, KIT_NAME + "_" + str(dara_version))
 
 if os.path.isdir(release_dirname):
     shutil.rmtree(release_dirname)
@@ -92,7 +105,7 @@ os.rename(temp_directory, release_dirname)
 # zip release directory
 release_zipname = release_dirname + ".zip"
 
-temp_file = dara_releases_path + "/tmp"
+temp_file = os.path.join(DARA_RELEASES_PATH, "tmp")
 shutil.make_archive(temp_file, 'zip', release_dirname)
 
 if os.path.isfile(release_zipname):
