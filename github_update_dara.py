@@ -85,7 +85,14 @@ for kit in KITS:
     zip_file_path = download_file(kit, data['zipball_url'])
     extracted_folder_name = extract_zip_file(zip_file_path, DARA_KITS_PATH)
 
-    os.rename(os.path.join(DARA_KITS_PATH, extracted_folder_name), os.path.splitext(zip_file_path)[0])
+    extracted_folder_name = os.path.join(DARA_KITS_PATH, extracted_folder_name)
+
+    # retrieve actual kit name (just in case it's not the same as the github repo name)
+    index_file = os.path.join(extracted_folder_name, "index.cfg")
+    index_xml = xml.etree.ElementTree.parse(index_file).getroot()
+    real_kit_name = index_xml.attrib["kit"]
+
+    os.rename(extracted_folder_name, os.path.join(DARA_KITS_PATH, real_kit_name))
     os.remove(zip_file_path)
 
 # duplicate dara folder
