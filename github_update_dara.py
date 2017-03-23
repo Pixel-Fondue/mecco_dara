@@ -3,7 +3,7 @@
 import requests, pprint, os, zipfile, shutil, glob, xml.etree.ElementTree
 
 USERNAME = "adam@evd1.tv"
-PASSWORD = "wnve2x9hp8v7gcX"
+PASSWORD = "7J2bax4NbSg3YkG"
 BASE_URL = "https://api.github.com/repos/adamohern/%s/releases/latest"
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
