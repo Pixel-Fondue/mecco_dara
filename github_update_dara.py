@@ -30,6 +30,7 @@ KITS = [
     'mecco_metermade',
     'mecco_passify',
     'mecco_renderMonkey',
+    'mecco_replay',
     'mecco_snap',
     'mecco_tagger',
     'mecco_wheely',
