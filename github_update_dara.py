@@ -106,6 +106,8 @@ for directory,subdirs,files in os.walk(temp_directory):
         os.unlink(os.path.join(temp_directory, directory, '.gitignore'))
     if '.gitmodules' in files:
         os.unlink(os.path.join(temp_directory, directory, '.gitmodules'))
+    if '.gitattributes' in files:
+        os.unlink(os.path.join(temp_directory, directory, '.gitattributes'))
     if '.git' in subdirs:
         shutil.rmtree(os.path.join(temp_directory, directory, '.git'))
     for pyc_file in [f for f in files if f.lower().endswith('.pyc')]:
