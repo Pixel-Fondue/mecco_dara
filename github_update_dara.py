@@ -1,9 +1,11 @@
 # python
 
-import requests, pprint, os, zipfile, shutil, glob, xml.etree.ElementTree
+import requests, pprint, os, zipfile, shutil, glob, xml.etree.ElementTree, getpass
 
-USERNAME = "adam@evd1.tv"
-PASSWORD = "7J2bax4NbSg3YkG"
+
+print "Username:"
+USERNAME = raw_input()
+PASSWORD = getpass.getpass()
 BASE_URL = "https://api.github.com/repos/adamohern/%s/releases/latest"
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -15,6 +17,9 @@ print DARA_PATH
 
 DARA_KITS_PATH = os.path.join(DARA_PATH, "Kits")
 print DARA_KITS_PATH
+
+DARA_WIP_PATH = os.path.join(BASE_PATH, "wip")
+print DARA_WIP_PATH
 
 DARA_RELEASES_PATH = os.path.join(BASE_PATH, "releases")
 print DARA_RELEASES_PATH
