@@ -1,11 +1,15 @@
 # python
 
+import sys
 import requests, pprint, os, zipfile, shutil, glob, xml.etree.ElementTree, getpass
 
 
 print "Username:"
 USERNAME = raw_input()
-PASSWORD = getpass.getpass()
+if 'PYCHARM' in os.environ:
+    PASSWORD = raw_input()
+else:
+    PASSWORD = getpass.getpass('Password: ')
 BASE_URL = "https://api.github.com/repos/adamohern/%s/releases/latest"
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -51,6 +55,8 @@ def download_file(kit, url):
                 f.write(chunk)
 
     complete_filename = tmp_filename.replace("_partial", ".zip")
+    if os.path.exists(complete_filename):
+        os.remove(complete_filename)
     os.rename(tmp_filename, complete_filename)
     return complete_filename
 
@@ -79,13 +85,29 @@ if not os.path.exists(DARA_KITS_PATH):
 if not os.path.exists(DARA_RELEASES_PATH):
     os.makedirs(DARA_RELEASES_PATH)
 
-# delete existing kits
-delete_dir_contents(DARA_KITS_PATH)
-
 # download and extract
 for kit in KITS:
-    rest_api_response = requests.get(BASE_URL % kit, auth=(USERNAME, PASSWORD))
+    try:
+        rest_api_response = requests.get(BASE_URL % kit, auth=(USERNAME, PASSWORD))
+        rest_api_response.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        print err
+        sys.exit(1)
     data = rest_api_response.json()
+
+    target_path = os.path.join(DARA_KITS_PATH, kit)
+    target_cfg = os.path.join(target_path, "index.cfg")
+    if os.path.exists(target_cfg) and os.path.isfile(target_cfg):
+        repo_version = data['tag_name']
+        config_xml = xml.etree.ElementTree.parse(target_cfg).getroot()
+        local_version = config_xml.attrib["version"]
+        if local_version == repo_version:
+            print "up to date %s..." % data['zipball_url']
+            continue
+
+    if os.path.exists(target_path):
+        shutil.rmtree(target_path)
+
     print "downloading %s..." % data['zipball_url']
 
     zip_file_path = download_file(kit, data['zipball_url'])
@@ -98,7 +120,7 @@ for kit in KITS:
     index_xml = xml.etree.ElementTree.parse(index_file).getroot()
     real_kit_name = index_xml.attrib["kit"]
 
-    os.rename(extracted_folder_name, os.path.join(DARA_KITS_PATH, real_kit_name))
+    os.rename(extracted_folder_name, target_path)
     os.remove(zip_file_path)
 
 # duplicate dara folder
