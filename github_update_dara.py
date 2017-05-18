@@ -2,16 +2,30 @@
 
 import sys
 import requests, pprint, os, zipfile, shutil, glob, xml.etree.ElementTree, getpass
+import json
+from os.path import expanduser
 
+home = expanduser("~")
+config_file_path = os.path.join(home, ".dara")
 
-print "Username:"
-USERNAME = raw_input()
-if 'PYCHARM' in os.environ:
-    PASSWORD = raw_input()
-else:
-    PASSWORD = getpass.getpass('Password: ')
+try:
+    config_file = open(config_file_path)
+    config = json.load(config_file)
+    USERNAME = config['GITHUB_USERNAME']
+    PASSWORD = config['GITHUB_PASSWORD']
+except:
+    print "Username:"
+    USERNAME = raw_input()
+    if 'PYCHARM' in os.environ:
+        PASSWORD = raw_input()
+    else:
+        PASSWORD = getpass.getpass('Password: ')
+
+    config = {'GITHUB_USERNAME':USERNAME, 'GITHUB_PASSWORD':PASSWORD}
+    config_file = open(config_file_path, 'w')
+    json.dump(config, config_file)
+
 BASE_URL = "https://api.github.com/repos/adamohern/%s/releases/latest"
-
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 print BASE_PATH
 
