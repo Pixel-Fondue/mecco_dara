@@ -280,5 +280,6 @@ def update_wip():
 
     shutil.rmtree(release_dirname)
 
+download_releases()
 update_wip()
 
