@@ -1,6 +1,7 @@
 .DS_Store
 *.pyc
 mecco_dara/Kits/*
+wip/*
 !mecco_dara/Kits/prefs.cfg
 releases/*
 !releases/placeholder.txt
