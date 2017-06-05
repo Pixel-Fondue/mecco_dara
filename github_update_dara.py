@@ -30,6 +30,7 @@ print "dara releases path:", DARA_RELEASES_PATH
 KITS = [
     'mecco_neatFreak',
     'mecco_solo',
+    'mecco_tabbyCat',
     'mecco_bling',
     'mecco_cropper',
     'mecco_flipper',
