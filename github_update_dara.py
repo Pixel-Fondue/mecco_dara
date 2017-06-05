@@ -1,51 +1,35 @@
 # python
 
-import sys
+import sys, traceback
 import requests, pprint, os, zipfile, shutil, glob, xml.etree.ElementTree, getpass
 import json
 from os.path import expanduser
 #from git import Repo
 
-home = expanduser("~")
-config_file_path = os.path.join(home, ".dara")
-
-try:
-    config_file = open(config_file_path)
-    config = json.load(config_file)
-    USERNAME = config['GITHUB_USERNAME']
-    PASSWORD = config['GITHUB_PASSWORD']
-except:
-    print "Username:"
-    USERNAME = raw_input()
-    if 'PYCHARM' in os.environ:
-        PASSWORD = raw_input()
-    else:
-        PASSWORD = getpass.getpass('Password: ')
-
-    config = {'GITHUB_USERNAME':USERNAME, 'GITHUB_PASSWORD':PASSWORD}
-    config_file = open(config_file_path, 'w')
-    json.dump(config, config_file)
-
 BASE_URL = "https://api.github.com/repos/adamohern/%s/releases/latest"
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
-print BASE_PATH
+print "base path:", BASE_PATH
+
+config_file_path = os.path.join(BASE_PATH, "_github_credentials")
+print "config file path:", config_file_path
 
 KIT_NAME = "mecco_dara"
 DARA_PATH = os.path.join(BASE_PATH, KIT_NAME)
-print DARA_PATH
+print "dara path:", DARA_PATH
 
 DARA_KITS_PATH = os.path.join(DARA_PATH, "Kits")
-print DARA_KITS_PATH
+print "dara kits path:", DARA_KITS_PATH
 
 DARA_WIP_PATH = os.path.join(BASE_PATH, "wip")
-print DARA_WIP_PATH
+print "dara WIP path:", DARA_WIP_PATH
 
 DARA_RELEASES_PATH = os.path.join(BASE_PATH, "releases")
-print DARA_RELEASES_PATH
+print "dara releases path:", DARA_RELEASES_PATH
 
 
 KITS = [
     'mecco_neatFreak',
+    'mecco_solo',
     'mecco_bling',
     'mecco_cropper',
     'mecco_flipper',
@@ -60,6 +44,31 @@ KITS = [
     'mecco_wheely',
     'mecco_Zen'
 ]
+
+def set_github_credentials():
+    global USERNAME
+    global PASSWORD
+
+    try:
+        config_file = open(config_file_path)
+        config = json.load(config_file)
+        USERNAME = config['GITHUB_USERNAME']
+        PASSWORD = config['GITHUB_PASSWORD']
+    except:
+        print "Username:"
+        USERNAME = raw_input()
+        if 'PYCHARM' in os.environ:
+            PASSWORD = raw_input()
+        else:
+            PASSWORD = getpass.getpass('Password: ')
+
+        config = {'GITHUB_USERNAME':USERNAME, 'GITHUB_PASSWORD':PASSWORD}
+        config_file = open(config_file_path, 'w')
+        json.dump(config, config_file)
+
+    finally:
+        print "username:", USERNAME
+        print "password:", PASSWORD[0] + "..."
 
 def download_file(kit, url):
     tmp_filename = os.path.join(DARA_KITS_PATH, kit + "_" + os.path.basename(url) + "_partial")
@@ -92,13 +101,14 @@ def extract_zip_file(src, dest):
     zip_ref.close()
     return extracted_folder_name
 
-# create Kits foler if it doesn't exist:
-if not os.path.exists(DARA_KITS_PATH):
-    os.makedirs(DARA_KITS_PATH)
+def make_dirs():
+    # create Kits foler if it doesn't exist:
+    if not os.path.exists(DARA_KITS_PATH):
+        os.makedirs(DARA_KITS_PATH)
 
-# create releases foler if it doesn't exist:
-if not os.path.exists(DARA_RELEASES_PATH):
-    os.makedirs(DARA_RELEASES_PATH)
+    # create releases foler if it doesn't exist:
+    if not os.path.exists(DARA_RELEASES_PATH):
+        os.makedirs(DARA_RELEASES_PATH)
 
 # download and extract
 def download_releases():
@@ -154,7 +164,10 @@ def download_releases():
         if '.git' in subdirs:
             shutil.rmtree(os.path.join(temp_directory, directory, '.git'))
         for pyc_file in [f for f in files if f.lower().endswith('.pyc')]:
-            os.unlink(pyc_file)
+            try:
+                os.unlink(pyc_file)
+            except:
+                print traceback.print_exc()
 
     # retrieve dara version
     index_file = os.path.join(temp_directory, "index.cfg")
@@ -280,6 +293,16 @@ def update_wip():
 
     shutil.rmtree(release_dirname)
 
-download_releases()
-update_wip()
+if __name__ == '__main__':
+    try:
+        set_github_credentials()
+        make_dirs()
+        download_releases()
+        update_wip()
 
+    except BaseException as e:
+        print traceback.print_exc()
+        raise
+
+    finally:
+        raw_input('(Press <Enter> to close)')
