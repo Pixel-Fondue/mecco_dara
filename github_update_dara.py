@@ -204,7 +204,7 @@ def update_wip():
 
     for kit in KITS:
         try:
-            repo_url = 'https://github.com/adamohern/%s' % kit
+            repo_url = 'https://%s:%s@github.com/adamohern/%s' % (USERNAME, PASSWORD, kit)
             dest_path = os.path.join(DARA_WIP_PATH, kit)
             if os.path.exists(dest_path):
                 print 'Update', kit

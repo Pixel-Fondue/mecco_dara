@@ -5,3 +5,4 @@ wip/*
 !mecco_dara/Kits/prefs.cfg
 releases/*
 !releases/placeholder.txt
+.idea/*
