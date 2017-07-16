@@ -34,6 +34,7 @@ KITS = [
     'mecco_bling',
     'mecco_cropper',
     'mc_noodles',
+    'mc_lifesaver',
     'mecco_flipper',
     'mecco_ignition',
     'mecco_kelvin',
