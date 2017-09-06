@@ -6,7 +6,7 @@ import json
 from os.path import expanduser
 #from git import Repo
 
-BASE_URL = "https://api.github.com/repos/adamohern/%s/releases/latest"
+BASE_URL = "https://api.github.com/repos/pixelfondue/%s/releases/latest"
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 print "base path:", BASE_PATH
 

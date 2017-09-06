@@ -6,3 +6,4 @@ wip/*
 releases/*
 !releases/placeholder.txt
 .idea/*
+_github_credentials
